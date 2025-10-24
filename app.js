@@ -1,7 +1,5 @@
-// app.js
-
 // ==========================
-// 1️⃣ Import Firebase Modules
+// 1️⃣ Firebase Import
 // ==========================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
@@ -34,7 +32,28 @@ const contactsListDiv = document.getElementById("contactsList");
 const searchResultDiv = document.getElementById("searchResult");
 
 // ==========================
-// 5️⃣ Add Contact
+// 5️⃣ Render Contacts (live update)
+// ==========================
+const contactsRef = ref(database, "contacts");
+
+function renderContacts(snapshot) {
+  contactsListDiv.innerHTML = "";
+  snapshot.forEach((childSnapshot) => {
+    const contact = childSnapshot.val();
+    const div = document.createElement("div");
+    div.classList.add("mb-2");
+    div.innerHTML = `<strong>${contact.name}</strong> - ${contact.phone}`;
+    contactsListDiv.appendChild(div);
+  });
+}
+
+// Live listener: updates list automatically when data changes
+onValue(contactsRef, (snapshot) => {
+  renderContacts(snapshot);
+});
+
+// ==========================
+// 6️⃣ Add Contact
 // ==========================
 addContactForm.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -42,47 +61,24 @@ addContactForm.addEventListener("submit", (e) => {
   const phone = document.getElementById("contactPhone").value.trim();
 
   if(name && phone){
-    const contactsRef = ref(database, "contacts");
     const newContactRef = push(contactsRef);
-    set(newContactRef, {
-      name: name,
-      phone: phone
-    }).then(() => {
-      alert("Contact added successfully!");
-      addContactForm.reset();
-      renderContactsList();
-    }).catch((error) => {
-      alert("Error adding contact: " + error);
-    });
+    set(newContactRef, { name, phone })
+      .then(() => {
+        alert("Contact added successfully!");
+        addContactForm.reset();
+      })
+      .catch((err) => alert("Error: " + err));
   }
 });
 
 // ==========================
-// 6️⃣ Render All Contacts
-// ==========================
-function renderContactsList() {
-  contactsListDiv.innerHTML = "";
-  const contactsRef = ref(database, "contacts");
-  onValue(contactsRef, (snapshot) => {
-    contactsListDiv.innerHTML = "";
-    snapshot.forEach((childSnapshot) => {
-      const contact = childSnapshot.val();
-      const div = document.createElement("div");
-      div.classList.add("mb-2");
-      div.innerHTML = `<strong>${contact.name}</strong> - ${contact.phone}`;
-      contactsListDiv.appendChild(div);
-    });
-  });
-}
-
-// ==========================
-// 7️⃣ Search Contact
+// 7️⃣ Search Contacts
 // ==========================
 searchContactForm.addEventListener("submit", (e) => {
   e.preventDefault();
-  const query = document.getElementById("searchQuery").value.trim().toLowerCase();
+  const query = document.getElementById("searchQuery").value.toLowerCase();
   searchResultDiv.innerHTML = "";
-  const contactsRef = ref(database, "contacts");
+
   onValue(contactsRef, (snapshot) => {
     searchResultDiv.innerHTML = "";
     snapshot.forEach((childSnapshot) => {
@@ -96,8 +92,3 @@ searchContactForm.addEventListener("submit", (e) => {
     });
   });
 });
-
-// ==========================
-// 8️⃣ Initial Render
-// ==========================
-renderContactsList();
