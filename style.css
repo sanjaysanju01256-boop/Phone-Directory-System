@@ -1,72 +1,57 @@
-/* style.css */
-
-/* Body and main container */
+/* Body & container */
 body {
-    background-color: #1a1a1a;
-    color: #ffffff;
-    font-family: 'Arial', sans-serif;
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-family: 'Arial', sans-serif;
 }
 
 .main-container {
-    margin-top: 30px;
+  margin-top: 30px;
 }
 
-/* Card styling */
+/* Cards */
 .card {
-    margin-bottom: 20px;
-    background-color: #2b2b2b;
-    border: none;
-    border-radius: 10px;
+  background-color: #2b2b2b;
+  border: none;
+  border-radius: 10px;
+  margin-bottom: 20px;
 }
 
 .card-header {
-    background-color: #3a3a3a;
-    color: #fff;
-    font-weight: bold;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+  background-color: #3a3a3a;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 10px 10px 0 0;
 }
 
-/* Stats cards */
-.stat-card {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: #3a3a3a;
-    border-radius: 5px;
-}
-
-.stat-card h6 {
-    margin: 0;
-    font-size: 14px;
-    color: #ccc;
-}
-
-.stat-card h3 {
-    margin: 0;
-}
-
-/* Search & input */
+/* Input Fields */
 input.form-control {
-    background-color: #1e1e1e;
-    border: 1px solid #555;
-    color: #fff;
+  background-color: #1e1e1e;
+  border: 1px solid #555;
+  color: #fff;
 }
 
 input.form-control:focus {
-    background-color: #1e1e1e;
-    color: #fff;
-    border-color: #0d6efd;
-    box-shadow: none;
+  border-color: #0d6efd;
+  box-shadow: none;
 }
 
 /* Buttons */
 .btn-primary {
-    background-color: #0d6efd;
-    border: none;
+  background-color: #0d6efd;
+  border: none;
 }
 
 .btn-primary:hover {
-    background-color: #0b5ed7;
+  background-color: #0b5ed7;
+}
+
+/* Contact List */
+#contactsList div,
+#searchResult div {
+  padding: 8px 10px;
+  background-color: #3a3a3a;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  color: #fff;
 }
