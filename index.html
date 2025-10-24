@@ -7,10 +7,8 @@
 
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-
   <!-- Bootstrap Icons -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
-
   <!-- Custom CSS -->
   <link rel="stylesheet" href="style.css">
 </head>
@@ -46,49 +44,21 @@
             </form>
           </div>
         </div>
-
-        <!-- Stats -->
-        <div class="card">
-          <div class="card-header">
-            <h4 class="mb-0"><i class="bi bi-graph-up"></i> Statistics</h4>
-          </div>
-          <div class="card-body">
-            <div class="stat-card">
-              <h6>Total Contacts</h6>
-              <h3 id="totalContacts">0</h3>
-            </div>
-            <div class="stat-card">
-              <h6>Load Factor</h6>
-              <h3 id="loadFactor">0%</h3>
-            </div>
-            <div class="stat-card">
-              <h6>Average Probe Distance</h6>
-              <h3 id="avgProbeDistance">0</h3>
-            </div>
-            <div class="stat-card">
-              <h6>Max Probe Distance</h6>
-              <h3 id="maxProbeDistance">0</h3>
-            </div>
-          </div>
-        </div>
       </div>
 
-      <!-- Search & Contacts -->
+      <!-- Contacts List & Search -->
       <div class="col-md-6">
-        <div class="card">
+        <div class="card mb-3">
           <div class="card-header">
             <h4 class="mb-0"><i class="bi bi-search"></i> Search Contact</h4>
           </div>
           <div class="card-body">
             <form id="searchContactForm">
-              <div class="mb-3">
-                <label for="searchQuery" class="form-label">Search by Name or Phone Number</label>
-                <div class="input-group">
-                  <input type="text" class="form-control" id="searchQuery" placeholder="Enter name or phone number" required>
-                  <button type="submit" class="btn btn-primary">
-                    <i class="bi bi-search"></i> Search
-                  </button>
-                </div>
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" id="searchQuery" placeholder="Search by name or phone" required>
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-search"></i> Search
+                </button>
               </div>
             </form>
             <div id="searchResult"></div>
@@ -113,7 +83,7 @@
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-  <!-- Custom JS -->
+  <!-- Firebase & Custom JS -->
   <script type="module" src="app.js"></script>
 </body>
 </html>
