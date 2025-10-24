@@ -2,7 +2,7 @@
 // 1️⃣ Firebase Import
 // ==========================
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-import { getDatabase, ref, push, set, onValue } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+import { getDatabase, ref, push, set, onValue, remove } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
 
 // ==========================
 // 2️⃣ Firebase Config
@@ -30,19 +30,31 @@ const addContactForm = document.getElementById("addContactForm");
 const searchContactForm = document.getElementById("searchContactForm");
 const contactsListDiv = document.getElementById("contactsList");
 const searchResultDiv = document.getElementById("searchResult");
-
-// ==========================
-// 5️⃣ Render Contacts (live update)
-// ==========================
 const contactsRef = ref(database, "contacts");
 
+// ==========================
+// 5️⃣ Render Contacts (All Contacts)
+// ==========================
 function renderContacts(snapshot) {
   contactsListDiv.innerHTML = "";
   snapshot.forEach((childSnapshot) => {
     const contact = childSnapshot.val();
+    const key = childSnapshot.key;
+
     const div = document.createElement("div");
-    div.classList.add("mb-2");
-    div.innerHTML = `<strong>${contact.name}</strong> - ${contact.phone}`;
+    div.classList.add("mb-2", "d-flex", "justify-content-between", "align-items-center");
+    div.innerHTML = `
+      <span><strong>${contact.name}</strong> - ${contact.phone}</span>
+      <button class="btn btn-danger btn-sm">Delete</button>
+    `;
+
+    // Delete contact
+    div.querySelector("button").addEventListener("click", () => {
+      if(confirm(`Are you sure you want to delete ${contact.name}?`)){
+        remove(ref(database, "contacts/" + key));
+      }
+    });
+
     contactsListDiv.appendChild(div);
   });
 }
@@ -64,7 +76,14 @@ addContactForm.addEventListener("submit", (e) => {
     const newContactRef = push(contactsRef);
     set(newContactRef, { name, phone })
       .then(() => {
-        alert("Contact added successfully!");
+        // Bootstrap alert
+        const alertContainer = document.getElementById("alertContainer");
+        alertContainer.innerHTML = `
+          <div class="alert alert-success alert-dismissible fade show" role="alert">
+            Contact <strong>${name}</strong> added successfully!
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        `;
         addContactForm.reset();
       })
       .catch((err) => alert("Error: " + err));
@@ -81,14 +100,33 @@ searchContactForm.addEventListener("submit", (e) => {
 
   onValue(contactsRef, (snapshot) => {
     searchResultDiv.innerHTML = "";
+    let found = false;
     snapshot.forEach((childSnapshot) => {
       const contact = childSnapshot.val();
+      const key = childSnapshot.key;
+
       if(contact.name.toLowerCase().includes(query) || contact.phone.includes(query)){
+        found = true;
         const div = document.createElement("div");
-        div.classList.add("mb-2");
-        div.innerHTML = `<strong>${contact.name}</strong> - ${contact.phone}`;
+        div.classList.add("mb-2", "d-flex", "justify-content-between", "align-items-center");
+        div.innerHTML = `
+          <span><strong>${contact.name}</strong> - ${contact.phone}</span>
+          <button class="btn btn-danger btn-sm">Delete</button>
+        `;
+
+        // Delete from search results
+        div.querySelector("button").addEventListener("click", () => {
+          if(confirm(`Are you sure you want to delete ${contact.name}?`)){
+            remove(ref(database, "contacts/" + key));
+          }
+        });
+
         searchResultDiv.appendChild(div);
       }
     });
+
+    if(!found){
+      searchResultDiv.innerHTML = `<div class="text-muted">No contacts found for "<strong>${query}</strong>"</div>`;
+    }
   });
 });
